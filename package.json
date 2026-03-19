@@ -1,5 +1,6 @@
 {
   "name": "@disane-dev/weishaupt-wem-mcp-server",
+  "mcpName": "io.github.Disane87/weishaupt-wem-mcp-server",
   "version": "0.1.0",
   "description": "MCP server for Weishaupt WEM Portal - control and monitor your heating system",
   "type": "module",

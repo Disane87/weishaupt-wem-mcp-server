@@ -1,42 +1,43 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
-  "name": "io.github.disane87/weishaupt-wem-mcp-server",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.Disane87/weishaupt-wem-mcp-server",
   "title": "Weishaupt WEM Portal",
   "description": "Control and monitor Weishaupt heating systems via the WEM Portal",
   "version": "0.1.0",
   "repository": {
     "url": "https://github.com/Disane87/weishaupt-wem-mcp-server",
     "source": "github",
-    "id": "disane87/weishaupt-wem-mcp-server"
+    "id": "Disane87/weishaupt-wem-mcp-server"
   },
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@disane-dev/weishaupt-wem-mcp-server",
       "version": "0.1.0",
-      "transport": [
-        {
-          "type": "stdio"
-        }
-      ],
+      "transport": {
+        "type": "stdio"
+      },
       "runtimeHint": "npx",
-      "environmentVariables": {
-        "WEM_USERNAME": {
+      "environmentVariables": [
+        {
+          "name": "WEM_USERNAME",
           "description": "Your WEM Portal email/username",
           "required": true,
           "secret": false
         },
-        "WEM_PASSWORD": {
+        {
+          "name": "WEM_PASSWORD",
           "description": "Your WEM Portal password",
           "required": true,
           "secret": true
         },
-        "WEM_API_URL": {
+        {
+          "name": "WEM_API_URL",
           "description": "WEM Portal API URL (default: https://www.wemportal.com/app)",
           "required": false,
           "secret": false
         }
-      }
+      ]
     }
   ]
 }
