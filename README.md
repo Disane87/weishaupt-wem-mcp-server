@@ -1,15 +1,41 @@
+<div align="center">
+
+<img src="https://www.wemportal.com/favicon.ico" alt="WEM Portal" width="80" />
+
 # Weishaupt WEM Portal MCP Server
 
-An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that connects AI assistants like Claude to your Weishaupt heating system via the WEM Portal.
+**Control and monitor your Weishaupt heating system with AI assistants via the WEM Portal**
+
+[![Version](https://img.shields.io/github/v/release/Disane87/weishaupt-wem-mcp-server?style=for-the-badge&label=Version&color=e63946)](https://github.com/Disane87/weishaupt-wem-mcp-server/releases)
+[![npm](https://img.shields.io/npm/v/@disane-dev/weishaupt-wem-mcp-server?style=for-the-badge&logo=npm&color=e63946)](https://www.npmjs.com/package/@disane-dev/weishaupt-wem-mcp-server)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Blog](https://img.shields.io/badge/Blog-disane.dev-blue?style=for-the-badge&logo=ghost&logoColor=white)](https://blog.disane.dev)
+[![Website](https://img.shields.io/badge/Website-disane.dev-blue?style=for-the-badge&logo=safari&logoColor=white)](https://disane.dev)
+
+[![MCP](https://img.shields.io/badge/MCP-Server-purple?style=flat-square&logo=anthropic&logoColor=white)](https://modelcontextprotocol.io)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js_%3E=18-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![semantic-release](https://img.shields.io/badge/semantic--release-conventionalcommits-e10079?style=flat-square&logo=semantic-release)](https://github.com/semantic-release/semantic-release)
+
+![GitHub Stars](https://img.shields.io/github/stars/Disane87/weishaupt-wem-mcp-server?style=flat-square&logo=github)
+![GitHub Issues](https://img.shields.io/github/issues/Disane87/weishaupt-wem-mcp-server?style=flat-square&logo=github)
+![CI](https://img.shields.io/github/actions/workflow/status/Disane87/weishaupt-wem-mcp-server/release.yml?style=flat-square&label=Release&logo=github)
+
+</div>
+
+---
 
 ## Features
 
-- List devices and modules from your WEM Portal account
-- Read all parameters with live values (temperatures, pressure, operating modes, etc.)
-- Write parameters (target temperatures, operating modes, schedules, etc.)
-- Check device connection status
-- Automatic session management with cookie-based authentication
-- Concurrent request handling with login lock
+- **Device Discovery** - List all devices and modules from your WEM Portal account
+- **Live Parameters** - Read temperatures, pressure, operating modes with current values
+- **Full Overview** - Get a complete snapshot of your entire heating system in one call
+- **Write Parameters** - Adjust target temperatures, operating modes, schedules
+- **Device Status** - Check connection status of your devices
+- **Writable Filter** - List only the parameters you can actually change
+- **Session Management** - Automatic cookie-based auth with login lock for concurrent requests
+
+---
 
 ## Quick Start
 
@@ -30,11 +56,16 @@ npm install
 npm run build
 ```
 
+---
+
 ## Configuration
 
-### Claude Desktop
+<details open>
+<summary><strong>Claude Desktop</strong></summary>
 
-Add to your Claude Desktop config (`%APPDATA%\Claude\claude_desktop_config.json` on Windows, `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+Add to your Claude Desktop config:
+- **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+- **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
 
 ```json
 {
@@ -51,15 +82,21 @@ Add to your Claude Desktop config (`%APPDATA%\Claude\claude_desktop_config.json`
 }
 ```
 
-### Claude Code
+</details>
+
+<details>
+<summary><strong>Claude Code</strong></summary>
 
 ```bash
-claude mcp add weishaupt-wem -- npx -y weishaupt-wem-mcp-server
+claude mcp add weishaupt-wem -- npx -y @disane-dev/weishaupt-wem-mcp-server
 ```
 
 Set the environment variables `WEM_USERNAME` and `WEM_PASSWORD` before starting.
 
-### From source
+</details>
+
+<details>
+<summary><strong>From source</strong></summary>
 
 ```json
 {
@@ -76,7 +113,9 @@ Set the environment variables `WEM_USERNAME` and `WEM_PASSWORD` before starting.
 }
 ```
 
-## Environment Variables
+</details>
+
+### Environment Variables
 
 | Variable | Required | Description |
 |---|---|---|
@@ -84,74 +123,39 @@ Set the environment variables `WEM_USERNAME` and `WEM_PASSWORD` before starting.
 | `WEM_PASSWORD` | Yes | Your WEM Portal password |
 | `WEM_API_URL` | No | API base URL (default: `https://www.wemportal.com/app`) |
 
+---
+
 ## Available Tools
 
-### `wem_get_devices`
+| Tool | Description |
+|---|---|
+| `wem_get_devices` | List all devices with modules. **Call this first** to discover IDs. |
+| `wem_get_device_status` | Get connection status of a device |
+| `wem_get_overview` | Full device overview: all modules with all parameters in one call |
+| `wem_get_parameters` | Get all parameters of a module with current values |
+| `wem_get_parameter_meta` | Get parameter metadata (names, min/max, enums, writable flag) |
+| `wem_get_writable_parameters` | List only adjustable parameters with ranges and options |
+| `wem_read_parameters` | Read specific parameter values by ID |
+| `wem_write_parameter` | Set a parameter value (e.g., target temperature) |
 
-Lists all devices with their modules. **Call this first** to get the `deviceId`, `moduleIndex`, and `moduleType` needed by other tools.
+> [!TIP]
+> Start with `wem_get_devices` to discover your `deviceId`, `moduleIndex`, and `moduleType`, then use `wem_get_overview` for a complete snapshot of your heating system.
 
-### `wem_get_device_status`
-
-Returns the connection status of a device.
-
-| Parameter | Type | Required | Description |
-|---|---|---|---|
-| `deviceId` | string | Yes | Device ID from `wem_get_devices` |
-
-### `wem_get_parameter_meta`
-
-Returns metadata for all parameters of a module: names, IDs, writable flag, min/max values, enum options.
-
-| Parameter | Type | Required | Description |
-|---|---|---|---|
-| `deviceId` | string | Yes | Device ID |
-| `moduleIndex` | number | Yes | Module index |
-| `moduleType` | number | Yes | Module type |
-
-### `wem_get_parameters`
-
-Returns all parameters of a module with current values. Combines metadata + refresh + read into one call.
-
-| Parameter | Type | Required | Description |
-|---|---|---|---|
-| `deviceId` | string | Yes | Device ID |
-| `moduleIndex` | number | Yes | Module index |
-| `moduleType` | number | Yes | Module type |
-
-### `wem_read_parameters`
-
-Reads specific parameter values. Use when you only need a subset of parameters.
-
-| Parameter | Type | Required | Description |
-|---|---|---|---|
-| `deviceId` | string | Yes | Device ID |
-| `moduleIndex` | number | Yes | Module index |
-| `moduleType` | number | Yes | Module type |
-| `parameterIds` | string[] | Yes | Array of parameter IDs |
-
-### `wem_write_parameter`
-
-Sets a parameter value. Only works for writable parameters.
-
-| Parameter | Type | Required | Description |
-|---|---|---|---|
-| `deviceId` | string | Yes | Device ID |
-| `moduleIndex` | number | Yes | Module index |
-| `moduleType` | number | Yes | Module type |
-| `parameterId` | string | Yes | Parameter ID |
-| `numericValue` | number | Yes | Value to set |
-| `stringValue` | string | No | String value for enum parameters |
+---
 
 ## Typical Workflow
 
 ```
 1. wem_get_devices
-   -> Returns devices with modules (e.g. WE0=heat generator, HZK0=heating circuit, WW0=hot water)
+   -> Returns devices with modules (WE0=heat generator, HZK0=heating circuit, WW0=hot water)
 
-2. wem_get_parameters (deviceId, moduleIndex, moduleType)
-   -> Returns all parameters with current values
+2. wem_get_overview (deviceId)
+   -> Returns ALL modules with ALL parameters in one call
 
-3. wem_write_parameter (deviceId, moduleIndex, moduleType, parameterId, numericValue)
+3. wem_get_writable_parameters (deviceId, moduleIndex, moduleType)
+   -> Shows what you can adjust, with min/max ranges
+
+4. wem_write_parameter (deviceId, moduleIndex, moduleType, parameterId, numericValue)
    -> Sets a writable parameter (e.g. target temperature)
 ```
 
@@ -168,48 +172,60 @@ Sets a parameter value. Only works for writable parameters.
 | 9 | Device | Physical device unit |
 | 10 | GROUND | Ground module |
 
+---
+
 ## Development
 
-```bash
-# Build
-npm run build
+| Command | Description |
+|---|---|
+| `npm run build` | Build the project |
+| `npm run watch` | Watch mode (auto-rebuild on changes) |
+| `npm start` | Run server directly |
+| `npm test` | Test API connection |
+| `npm run inspector` | Official MCP Inspector (Web UI) |
+| `npm run inspector:cli -- devices` | CLI inspector for quick API tests |
 
-# Watch mode
-npm run watch
-
-# Run server directly
-npm start
-
-# Test API connection
-npm test
-
-# Official MCP Inspector (Web UI)
-npm run inspector
-
-# CLI inspector for quick API tests
-npm run inspector:cli -- devices
-npm run inspector:cli -- params '{"deviceId": "123", "moduleIndex": 0, "moduleType": 7}'
-```
+---
 
 ## Troubleshooting
 
-### Authentication failed
+> [!NOTE]
+> Make sure you can log in at [wemportal.com](https://www.wemportal.com/) before using this server.
 
-- Verify credentials at [wemportal.com](https://www.wemportal.com/)
-- Check that `WEM_USERNAME` and `WEM_PASSWORD` are set correctly
-- The WEM Portal may temporarily block after too many failed attempts
+| Issue | Solution |
+|---|---|
+| Authentication failed | Verify credentials, check if WEM Portal blocks after too many attempts |
+| Connection timeout | Check internet, WEM Portal may be temporarily unavailable (30s default timeout) |
+| Parameter values show 0 | Some parameters (e.g. room temperature) require a physical sensor connected to the device |
 
-### Connection timeout
+---
 
-- Check internet connectivity
-- The WEM Portal may be temporarily unavailable
-- Default timeout is 30 seconds (configurable in `src/wem-client.ts`)
+## Contributing
 
-### Parameter values show 0
+Contributions are welcome! Please open an issue or submit a pull request.
 
-- Some parameters (e.g. room temperature) require a physical sensor connected to the device
-- A value of `0` may indicate no sensor is installed
+<!-- contrib:start -->
+<div align="center">
+
+<a href="https://github.com/Disane87/weishaupt-wem-mcp-server/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Disane87/weishaupt-wem-mcp-server" />
+</a>
+
+</div>
+<!-- contrib:end -->
+
+---
 
 ## License
 
 MIT - see [LICENSE](LICENSE)
+
+---
+
+<div align="center">
+
+**[disane.dev](https://disane.dev)** | **[Blog](https://blog.disane.dev)** | **[GitHub](https://github.com/Disane87)** | **[npm](https://www.npmjs.com/package/@disane-dev/weishaupt-wem-mcp-server)**
+
+Built with [Claude Code](https://claude.ai/code)
+
+</div>
