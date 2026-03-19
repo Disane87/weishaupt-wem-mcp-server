@@ -226,6 +226,4 @@ MIT - see [LICENSE](LICENSE)
 
 **[disane.dev](https://disane.dev)** | **[Blog](https://blog.disane.dev)** | **[GitHub](https://github.com/Disane87)** | **[npm](https://www.npmjs.com/package/@disane-dev/weishaupt-wem-mcp-server)**
 
-Built with [Claude Code](https://claude.ai/code)
-
 </div>
