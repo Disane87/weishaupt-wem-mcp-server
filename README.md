@@ -18,7 +18,7 @@ An [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that c
 No installation needed. Configure your MCP client to run:
 
 ```bash
-npx weishaupt-wem-mcp-server
+npx @disane-dev/weishaupt-wem-mcp-server
 ```
 
 ### Install from source
@@ -41,7 +41,7 @@ Add to your Claude Desktop config (`%APPDATA%\Claude\claude_desktop_config.json`
   "mcpServers": {
     "weishaupt-wem": {
       "command": "npx",
-      "args": ["-y", "weishaupt-wem-mcp-server"],
+      "args": ["-y", "@disane-dev/weishaupt-wem-mcp-server"],
       "env": {
         "WEM_USERNAME": "your_email@example.com",
         "WEM_PASSWORD": "your_password"

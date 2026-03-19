@@ -12,7 +12,7 @@
   "packages": [
     {
       "registryType": "npm",
-      "identifier": "weishaupt-wem-mcp-server",
+      "identifier": "@disane-dev/weishaupt-wem-mcp-server",
       "version": "1.0.0",
       "transport": [
         { "type": "stdio" }

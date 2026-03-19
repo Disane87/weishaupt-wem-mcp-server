@@ -1,6 +1,6 @@
 {
-  "name": "weishaupt-wem-mcp-server",
-  "version": "0.0.0-development",
+  "name": "@disane-dev/weishaupt-wem-mcp-server",
+  "version": "0.0.0",
   "description": "MCP server for Weishaupt WEM Portal - control and monitor your heating system",
   "type": "module",
   "main": "build/index.js",
