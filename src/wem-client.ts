@@ -249,6 +249,38 @@ export class WEMClient {
     });
   }
 
+  // --- High-level: Full device overview ---
+
+  async getDeviceOverview(deviceId: string): Promise<{ device: WEMDevice; modules: { moduleName: string; moduleIndex: number; moduleType: number; parameters: WEMParameterFull[] }[] }> {
+    const devices = await this.getDevices();
+    const device = devices.find(d => String(d.ID) === String(deviceId));
+    if (!device) throw new Error(`Device ${deviceId} not found`);
+
+    const modules: { moduleName: string; moduleIndex: number; moduleType: number; parameters: WEMParameterFull[] }[] = [];
+
+    for (const mod of device.Modules) {
+      try {
+        const params = await this.getAllParameters(deviceId, mod.Index, mod.Type);
+        modules.push({
+          moduleName: mod.Name,
+          moduleIndex: mod.Index,
+          moduleType: mod.Type,
+          parameters: params,
+        });
+      } catch {
+        // Some modules may not support parameter reading
+        modules.push({
+          moduleName: mod.Name,
+          moduleIndex: mod.Index,
+          moduleType: mod.Type,
+          parameters: [],
+        });
+      }
+    }
+
+    return { device, modules };
+  }
+
   // --- Device Status ---
 
   async getDeviceStatus(deviceId: string): Promise<any> {

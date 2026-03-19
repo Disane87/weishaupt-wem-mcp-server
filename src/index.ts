@@ -8,7 +8,13 @@ import {
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
 import * as dotenv from 'dotenv';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import { WEMClient } from './wem-client.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const pkg = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf-8'));
 
 dotenv.config();
 
@@ -25,8 +31,8 @@ const wemClient = new WEMClient(WEM_USERNAME, WEM_PASSWORD, WEM_API_URL);
 
 const server = new Server(
   {
-    name: 'weishaupt-wem-server',
-    version: '1.0.0',
+    name: pkg.name,
+    version: pkg.version,
   },
   {
     capabilities: {
@@ -130,6 +136,42 @@ const TOOLS: Tool[] = [
         },
       },
       required: ['deviceId', 'moduleIndex', 'moduleType', 'parameterIds'],
+    },
+  },
+  {
+    name: 'wem_get_overview',
+    description: 'Get a complete overview of a device: all modules with all their parameters and current values in a single call. Useful for getting a full picture of the heating system state.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        deviceId: {
+          type: 'string',
+          description: 'Device ID (from wem_get_devices)',
+        },
+      },
+      required: ['deviceId'],
+    },
+  },
+  {
+    name: 'wem_get_writable_parameters',
+    description: 'Get only the writable parameters of a module (parameters that can be changed). Shows current values, min/max ranges, and enum options. Useful to see what can be adjusted.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        deviceId: {
+          type: 'string',
+          description: 'Device ID (from wem_get_devices)',
+        },
+        moduleIndex: {
+          type: 'number',
+          description: 'Module index',
+        },
+        moduleType: {
+          type: 'number',
+          description: 'Module type',
+        },
+      },
+      required: ['deviceId', 'moduleIndex', 'moduleType'],
     },
   },
   {
@@ -239,6 +281,31 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const result = await wemClient.readParameters(deviceId, moduleRef);
         return {
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+      }
+
+      case 'wem_get_overview': {
+        const deviceId = args?.deviceId as string;
+        if (!deviceId) throw new Error('deviceId is required');
+
+        const overview = await wemClient.getDeviceOverview(deviceId);
+        return {
+          content: [{ type: 'text', text: JSON.stringify(overview, null, 2) }],
+        };
+      }
+
+      case 'wem_get_writable_parameters': {
+        const deviceId = args?.deviceId as string;
+        const moduleIndex = args?.moduleIndex as number;
+        const moduleType = args?.moduleType as number;
+        if (!deviceId || moduleIndex === undefined || moduleType === undefined) {
+          throw new Error('deviceId, moduleIndex, and moduleType are required');
+        }
+
+        const allParams = await wemClient.getAllParameters(deviceId, moduleIndex, moduleType);
+        const writable = allParams.filter(p => p.IsWriteable);
+        return {
+          content: [{ type: 'text', text: JSON.stringify(writable, null, 2) }],
         };
       }
 
