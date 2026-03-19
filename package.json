@@ -1,0 +1,65 @@
+{
+  "name": "weishaupt-wem-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for Weishaupt WEM Portal - control and monitor your heating system",
+  "type": "module",
+  "main": "build/index.js",
+  "bin": {
+    "weishaupt-wem-mcp-server": "build/index.js"
+  },
+  "files": [
+    "build/index.js",
+    "build/index.d.ts",
+    "build/wem-client.js",
+    "build/wem-client.d.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "node build/index.js",
+    "dev": "tsc && node --watch build/index.js",
+    "prepublishOnly": "npm run build",
+    "test": "tsc && node build/test.js",
+    "inspector": "tsc && npx @modelcontextprotocol/inspector node build/index.js",
+    "inspector:cli": "tsc && node build/inspector.js"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "weishaupt",
+    "wem",
+    "wemportal",
+    "heating",
+    "heat-pump",
+    "smart-home",
+    "home-automation"
+  ],
+  "author": "Marco Franke",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/disane87/weishaupt-wem-mcp-server"
+  },
+  "homepage": "https://github.com/disane87/weishaupt-wem-mcp-server#readme",
+  "bugs": {
+    "url": "https://github.com/disane87/weishaupt-wem-mcp-server/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "axios": "^1.6.0",
+    "axios-cookiejar-support": "^6.0.5",
+    "dotenv": "^16.4.0",
+    "tough-cookie": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/tough-cookie": "^4.0.5",
+    "typescript": "^5.3.0"
+  }
+}
