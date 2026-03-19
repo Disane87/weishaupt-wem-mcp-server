@@ -1,3 +1,10 @@
+# [0.2.0](https://github.com/Disane87/weishaupt-wem-mcp-server/compare/v0.1.0...v0.2.0) (2026-03-19)
+
+
+### Features
+
+* add mcpName for official MCP Registry and fix server.json schema ([5d7c0c0](https://github.com/Disane87/weishaupt-wem-mcp-server/commit/5d7c0c06323ca12a6a56fa2ecb457b28e96092c8))
+
 # [0.1.0](https://github.com/Disane87/weishaupt-wem-mcp-server/compare/v0.0.0...v0.1.0) (2026-03-19)
 
 
