@@ -15,7 +15,9 @@
       "identifier": "@disane-dev/weishaupt-wem-mcp-server",
       "version": "0.1.0",
       "transport": [
-        { "type": "stdio" }
+        {
+          "type": "stdio"
+        }
       ],
       "runtimeHint": "npx",
       "environmentVariables": {
