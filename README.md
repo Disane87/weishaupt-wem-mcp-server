@@ -24,7 +24,7 @@ npx @disane-dev/weishaupt-wem-mcp-server
 ### Install from source
 
 ```bash
-git clone https://github.com/disane87/weishaupt-wem-mcp-server.git
+git clone https://github.com/Disane87/weishaupt-wem-mcp-server.git
 cd weishaupt-wem-mcp-server
 npm install
 npm run build

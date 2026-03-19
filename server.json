@@ -5,7 +5,7 @@
   "description": "Control and monitor Weishaupt heating systems via the WEM Portal",
   "version": "1.0.0",
   "repository": {
-    "url": "https://github.com/disane87/weishaupt-wem-mcp-server",
+    "url": "https://github.com/Disane87/weishaupt-wem-mcp-server",
     "source": "github",
     "id": "disane87/weishaupt-wem-mcp-server"
   },
